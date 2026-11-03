@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>8-Puzzle Solver Demo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="site-header">
+  <h1>8-Puzzle Solver</h1>
+  <p class="sub">Watch Q-learning, a DQN, a wider DQN v2 and A* solve a picture puzzle, or play it yourself.</p>
+</header>
+
+<main>
+  <!-- Step 1: picture -->
+  <section class="card" aria-labelledby="h-image">
+    <h2 id="h-image">1. Choose a picture</h2>
+    <div class="row">
+      <label class="file-label">
+        <span>Upload image (PNG, JPEG or WEBP, max 5 MB)</span>
+        <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp">
+      </label>
+      <button type="button" id="defaultImageBtn" class="btn secondary">Use default picture</button>
+      <label class="check"><input type="checkbox" id="numbersToggle" checked> Show tile numbers</label>
+    </div>
+    <p id="imageMsg" class="msg" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- Step 2: scramble -->
+  <section class="card" aria-labelledby="h-scramble">
+    <h2 id="h-scramble">2. Scramble</h2>
+    <div class="row">
+      <label for="depth">Difficulty (scramble depth): <output id="depthOut">10</output></label>
+      <input type="range" id="depth" min="3" max="30" value="10">
+      <button type="button" id="scrambleBtn" class="btn">Scramble</button>
+    </div>
+    <p id="scrambleMsg" class="msg" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- Step 3: modes -->
+  <section class="card" aria-labelledby="h-play">
+    <h2 id="h-play">3. Solve it</h2>
+    <div class="tabs" role="group" aria-label="Mode">
+      <button type="button" class="tab" data-mode="watch" aria-pressed="true">Watch AI</button>
+      <button type="button" class="tab" data-mode="compare" aria-pressed="false">Compare</button>
+      <button type="button" class="tab" data-mode="play" aria-pressed="false">Play</button>
+    </div>
+
+    <!-- Controls per mode -->
+    <div id="panel-watch" class="panel">
+      <div class="row">
+        <button type="button" class="btn" data-method="qlearning">Q-learning</button>
+        <button type="button" class="btn" data-method="dqn">DQN</button>
+        <button type="button" class="btn" data-method="dqn2">DQN v2</button>
+        <button type="button" class="btn" data-method="astar">A*</button>
+      </div>
+      <p id="modelNote" class="note"></p>
+    </div>
+
+    <div id="panel-compare" class="panel" hidden>
+      <div class="row">
+        <button type="button" class="btn" id="compareBtn">Run all four on this board</button>
+      </div>
+    </div>
+
+    <div id="panel-play" class="panel" hidden>
+      <div class="row">
+        <button type="button" class="btn secondary" id="hintBtn">Hint</button>
+        <button type="button" class="btn secondary" id="resetBtn">Reset to scramble</button>
+        <span class="stat">Moves: <strong id="moveCount">0</strong></span>
+        <span class="stat">Time: <strong id="timer">0:00</strong></span>
+      </div>
+      <p class="note">Click a tile next to the gap, or press an arrow key: the arrow moves the
+        <em>tile</em> in that direction into the gap (press Left to slide the tile on the right of the gap to the left).</p>
+    </div>
+
+    <!-- Animation controls (watch + compare) -->
+    <div id="animControls" class="row anim">
+      <button type="button" class="btn secondary" id="pauseBtn" disabled>Pause</button>
+      <button type="button" class="btn secondary" id="stopBtn" disabled>Stop</button>
+      <label for="speed">Speed</label>
+      <input type="range" id="speed" min="1" max="10" value="6">
+    </div>
+
+    <p id="statusMsg" class="msg big" role="status" aria-live="polite"></p>
+
+    <!-- Main board (watch + play) -->
+    <div id="mainStage" class="stage">
+      <div id="board" class="board" role="group" aria-label="Puzzle board"></div>
+    </div>
+
+    <!-- Compare view -->
+    <div id="compareStage" hidden>
+      <div class="mini-row">
+        <figure><div id="mini-qlearning" class="board mini"></div><figcaption>Q-learning</figcaption></figure>
+        <figure><div id="mini-dqn" class="board mini"></div><figcaption>DQN</figcaption></figure>
+        <figure><div id="mini-dqn2" class="board mini"></div><figcaption>DQN v2</figcaption></figure>
+        <figure><div id="mini-astar" class="board mini"></div><figcaption>A*</figcaption></figure>
+      </div>
+      <div class="table-wrap">
+        <table id="compareTable">
+          <thead><tr><th>Method</th><th>Solved?</th><th>Moves</th><th>Time (ms)</th><th>Note</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Training results -->
+  <section class="card" aria-labelledby="h-results">
+    <h2 id="h-results">Training results</h2>
+    <div id="resultsBox"><p class="note">Loading...</p></div>
+  </section>
+</main>
+
+<script src="{{ url_for('static', filename='js/board.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

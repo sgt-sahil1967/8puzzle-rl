@@ -1,0 +1,28 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+
+# Training outputs
+puzzle/checkpoints/
+puzzle/logs/
+puzzle/results/
+
+# Report build assets (keep only the final PDF at repo root)
+report/figs/
+report/shots/
+report/*.pdf
+
+# Other documents
+*.pdf
+!/Mini_Project_Report.pdf
